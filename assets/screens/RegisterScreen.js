@@ -2,7 +2,7 @@
 import { StatusBar } from 'expo-status-bar';
 
 import React, {useEffect} from "react"
-import { StyleSheet, Text, TextInput, View ,TouchableOpacity, Alert} from 'react-native';
+import { StyleSheet, Text, TextInput, View ,TouchableOpacity, Alert, ActivityIndicator} from 'react-native';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {Colors} from "../utils/Colors"
@@ -17,7 +17,7 @@ import { useRegisterMutation } from '../services/api';
 import { saveUser,getData } from '../utils/saveUser';
 
 export default function RegisterScreen({navigation}) {
-  const [register,{data,isLoading,isSuccess,isError}] = useRegisterMutation()
+  const [register,{data,isLoading,isSuccess,isError,error}] = useRegisterMutation()
    console.log(data,"data from here")
   const schema = yup.object().shape({
     name: yup.string().min(8).required(),
@@ -45,8 +45,12 @@ export default function RegisterScreen({navigation}) {
       saveUser(data)
       getData().then((data)=>console.log(data,"ookkk"))
       navigation.navigate("Home")
+
     }
-  },[navigation,isSuccess])
+    if(isError){
+      Alert.alert(error.data.message)
+    }
+  },[navigation,isSuccess,isError])
 
 
 
@@ -82,9 +86,7 @@ export default function RegisterScreen({navigation}) {
     <View style={styles.container}>
         <HeadingTitle title="Welcome !" fontSize={35} color={Colors.textColor2}/>
       <HeadingTitle title="Sign Up with Email" fontSize={16} color={Colors.textColor2}/>
-       <Text 
-        style={{justifyContent:"flex-start"}}
-       >Name</Text>
+      
       <Controller
         control={control}
         render={({field: { onChange, onBlur, value ,onFocus}}) => (
@@ -96,6 +98,7 @@ export default function RegisterScreen({navigation}) {
             style={focus.name?styles.focusInput:styles.input}
            
             onChangeText={value => onChange(value)}
+           
             value={value}
           />
         )}
@@ -148,13 +151,18 @@ export default function RegisterScreen({navigation}) {
         {
        errors.password?.message && <ErrorMessage title={errors.password?.message}/>
      }  
-    
+      {
+        isLoading?  <View  style={styles.horizontal}> 
+        <ActivityIndicator size="large" color="white" />
+        </View>:
+      
     
        <StyledButton h={56} onClick={handleSubmit((data1)=>registerUser(data1))} bg={Colors.purple1}  title={isLoading?"Loading..":"REGISTER"} />
-
+      }
        <Text style={{marginTop:10,fontSize:14,color:Colors.textColor1}} >
         Already has account?
        </Text>
+
        <StyledButton onClick={()=>navigation.navigate("SignIn")} fontSize={16} mt={0} bg="white" title="Sign In" color={Colors.textColor2}/>
         
       <StatusBar style="auto" />
@@ -185,7 +193,17 @@ const styles = StyleSheet.create({
    
 
   },
+  horizontal: {
+    width:"100%",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 13,
+    backgroundColor:Colors.purple1,
+    marginTop:10,
+    borderRadius:10,
 
+  
+  },
   container: {
     
     paddingHorizontal:25,

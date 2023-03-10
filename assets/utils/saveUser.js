@@ -35,3 +35,18 @@ export const getData=async()=>{
     }
 
 }
+
+
+export const removeUser=async()=>{
+  try{
+     await AsyncStorage.removeItem("user")
+    
+    
+ }
+ catch(error){
+
+   Alert.alert("Error has Occured")
+
+
+ }
+}

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { api } from "../services/api";
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { getData } from "../utils/saveUser";
+import { getData, removeUser } from "../utils/saveUser";
  
 
 
@@ -18,8 +18,16 @@ const userSlice =createSlice({
     reducers:{
 
         addUser:(state,{payload})=>{
+            
             state.user=payload.user
+        },
+        logUserOut:(state)=>{
+
+          removeUser()
+          state.user=null
+
         }
+            
 
     }
 
@@ -28,7 +36,7 @@ const userSlice =createSlice({
             api.endpoints.register.matchFulfilled,
           
              (state,{payload})=>{
-             
+                
               state.user=payload
             }
         )
@@ -40,4 +48,4 @@ const userSlice =createSlice({
 
 
 export default userSlice.reducer
-export const {addUser}= userSlice.actions
+export const {addUser,logUserOut}= userSlice.actions

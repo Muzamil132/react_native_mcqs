@@ -7,7 +7,7 @@ const ErrorMessage=({title,color="red",bg="black",fontSize=14})=>{
               <View 
                style={{width:"100%",justifyContent:"flex-start"}}
               >
-                <Text style={{fontSize:fontSize,color:color,fontWeight:"normal"}}>
+                <Text style={{fontSize:fontSize,color:color,fontWeight:"normal",fontFamily:"Roboto"}}>
                   {title}
                 </Text>
                 </View>

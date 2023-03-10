@@ -1,14 +1,35 @@
 import { StyleSheet, View ,Text, TouchableOpacity} from "react-native"
 import { Colors } from "../utils/Colors";
 import { useNavigation } from '@react-navigation/native';
-const CateGoryCard =({title})=>{
-
+import Icon from "react-native-vector-icons/FontAwesome5";
+import { addRandomColor } from "../utils/RandomColor";
+const CateGoryCard =({title,id})=>{
+    console.log(title,id)
+    const myIcon = <Icon name="atom" size={30}  color={Colors.indigo2} />;
     const navigation = useNavigation()
+
+    // const navigateToScreen=(subject)=>{
+    //  switch(subject){
+    //     case "Physics":
+    //         navigation.navigate("NestedCategory",{})
+    //         break ;
+    //     default:
+    //         navigation.navigate("subCategory",{title,cate}) 
+           
+
+    //  }
+
+
+    // }
+
     return (
         <TouchableOpacity 
-         onPress={()=>navigation.navigate("subCategory",{title:"Home"})}
+        style={[styles.card,{borderLeftColor:addRandomColor(title)}]} 
+         onPress={()=>navigation.navigate("SubCategoryListing",{id,title})}
         >
-        <View style={styles.card} >
+            <Text>{myIcon}</Text>
+        <View>
+            
          <Text style={styles.text} >
           {title}
          </Text>
@@ -19,18 +40,29 @@ const CateGoryCard =({title})=>{
 
 const styles = StyleSheet.create({
     card:{
-        color:"white",
+        borderLeftWidth:4,
+        
+        backgroundColor:"white",
         borderRadius:20,
         justifyContent:"center",
         alignItems:"center",
         height:150,
         width:170,
-       
         margin:5,
-        backgroundColor:Colors.purple
+        shadowOffset: {
+            width: 0,
+            height: 3,
+          },
+          shadowOpacity:  0.17,
+          shadowRadius: 3.05,
+          elevation: 2
+       
     }
     ,text:{
-        color:"white"
+        fontSize:16,
+        fontFamily:"Roboto",
+        color:"black",
+        fontWeight:"600"
     }
     
   });

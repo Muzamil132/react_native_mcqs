@@ -9,16 +9,16 @@ import {Colors} from "../utils/Colors"
 import { useForm,Controller } from "react-hook-form";
 import ErrorMessage from "../components/ErrorMessage"
 import HeadingTitle from "../components/HeadingTiltle"
-import { useLoginMutation } from '../services/api';
-import { getData, saveUser } from '../utils/saveUser';
-export default function LoginScreen({navigation}) {
+import { useAddCategoryMutation, useLoginMutation } from '../services/api';
+// import { getData, saveUser } from '../utils/saveUser';
+export default function CreateCategory({navigation}) {
 
   const schema = yup.object().shape({
    
-    password: yup.string().min(8).max(32).required(),
-    email:yup.string().email().required()
+  
+    title:yup.string().min(5).required()
   });
-  const [login,{data,isSuccess,isLoading,isError,error}]= useLoginMutation()
+  const [addCategory,{data,isSuccess,isLoading,isError,error}]= useAddCategoryMutation()
  
   console.log(data,"from login Screen")
   console.log(error,"from Error Screen")
@@ -26,9 +26,7 @@ export default function LoginScreen({navigation}) {
     resolver: yupResolver(schema)
   });
   const [focus,setFocus]=React.useState({
-    name:false,
-    email:false,
-    password:false,
+   title:false
     
 
 
@@ -60,68 +58,48 @@ export default function LoginScreen({navigation}) {
   }
   useEffect(()=>{
     if(isSuccess){
-      saveUser(data)
-      getData().then((data)=>console.log(data,"ookkk"))
-      navigation.navigate("Home")
+     Alert.alert("Suffessfully added")
+     reset()
     }
     if(isError){
-      Alert.alert(error.data.message)
+      Alert.alert(error.data.message?error.data.message:"Some Error has occured")
     }
 
   },[navigation,isSuccess,isError])
-   const loginUser=async(data1)=>{
+   const add=async(data1)=>{
   
-    await login(data1)
+    await addCategory(data1)
 
    }
 
   return (
     <View style={styles.container}>
-        <HeadingTitle title="Welcome !" fontSize={35} color={Colors.textColor2}/>
-      <HeadingTitle title="Sign In with Email" fontSize={16} color={Colors.textColor2}/>
+       
+      <HeadingTitle title="Create new category" fontSize={18} color={Colors.textColor2}/>
       
        
-       <Controller
+     
+
+        <Controller
         control={control}
         render={({field: { onChange, onBlur, value ,onFocus}}) => (
            
 
           <TextInput
-            placeholder='Email'
+          {...propsInput('title')}
             
-            style={focus.email?styles.focusInput:styles.input}
-            {...propsInput('email')}
-            onChangeText={value => onChange(value)}
-            value={value}
-          />
-        )}
-        name="email"
-       
-      />
-        {
-       errors.email?.message && <ErrorMessage title={errors.email?.message}/>
-     }  
-
-<Controller
-        control={control}
-        render={({field: { onChange, onBlur, value ,onFocus}}) => (
-           
-
-          <TextInput
-          {...propsInput('password')}
-            secureTextEntry={true}
-            placeholder='Password'
-            style={focus.password?styles.focusInput:styles.input}
+            placeholder='Title'
+            style={focus.title?styles.focusInput:styles.input}
            
             onChangeText={value => onChange(value)}
             value={value}
           />
         )}
-        name="password"
+        name="title"
        
       />
         {
-       errors.password?.message && <ErrorMessage title={errors.password?.message}/>
+       errors.title?.message && <ErrorMessage title={errors.title?.message}/>
      }  
        
        {
@@ -130,16 +108,11 @@ export default function LoginScreen({navigation}) {
          </View>:
        
     
-       <StyledButton h={56} onClick={handleSubmit((data1)=>loginUser(data1))} bg={Colors.purple1} 
-        title="Sign in" />
+       <StyledButton h={56} onClick={handleSubmit((data1)=>add(data1))} bg={Colors.purple1} 
+        title="Add Category" />
        }
 
-       <Text style={{marginTop:10,fontSize:14,color:Colors.textColor1}} >
-        Dont have Account?
-       </Text>
-       <StyledButton onClick={()=>navigation.navigate('SignUp')} fontSize={16} mt={0} bg="white" title="Sign Up" color={Colors.textColor2}/>
-        
-      <StatusBar style="auto" />
+      
     </View>
   );
 }

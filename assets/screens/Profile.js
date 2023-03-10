@@ -18,34 +18,44 @@ import QuestionCard from "../components/QuestionCard";
 import StyledButton from "../components/StyledButton";
 import { updateQuestionList } from "../reducers/QuestionReducer";
 
-import { useGetQuestionsQuery } from "../services/api";
+import { useGetQuestionsQuery, useMyQuestionsQuery } from "../services/api";
 
 import { Colors } from "../utils/Colors";
 
+const Profile = ({ route, navigation }) => {
+ const {user}= useSelector((state)=>state.userReducer)
 
-
-const SubCategories = ({ route, navigation }) => {
   const [page,setPage]=useState(1)
 
   const dispatch = useDispatch()
-  const { data, isSuccess, isError, isLoading,isFetching,error} = useGetQuestionsQuery(
+  const { data, isSuccess, isError, isLoading,isFetching,error} = useMyQuestionsQuery(
     {
-      id:route.params.id,page
+     id:user?.id ,page
     }
   );
-  const {questions} = useSelector(state=>state.QuestionReducer)
-  console.log(data,error)
-   useEffect(()=>{
-    if(!isFetching){
-      dispatch(updateQuestionList({questions:data}))
-    }
+ 
+  const  {questions,count}= useSelector((state)=>state.myQuestionReducer)
+  console.log(data, "dat is  ")
+  console.log(error, "error is  ")
+   
+//    useEffect(()=>{
+//     if(!isFetching){
+//       dispatch(updateQuestionList({questions:data}))
+//     }
     
 
 
-   },[page,dispatch])
+//    },[page,dispatch])
 
   
-
+  const subjects = [
+    "Cuurent Affairs",
+    "World Affairs",
+    "Pysics",
+    "Mathematics",
+    "Chemistrty",
+    "Biology",
+  ];
 
    
   if(isLoading){
@@ -53,18 +63,18 @@ const SubCategories = ({ route, navigation }) => {
       <View 
       style={styles.loadingContainer}
       >
-        <ActivityIndicator size="large" color={Colors.purple} />
+        <ActivityIndicator size="large" color={Colors.green} />
 
 
       </View>
     )
   }
 
-  if(data!==undefined && questions.questions.length===0){
+  if(data!==undefined && questions.length===0){
     return(
       <View style={{paddingHorizontal:30,paddingVertical:20}}>
-        <Text style={{fontSize:18,fontFamily:"Roboto"}}>We are working on this section keep visiting us</Text>
-      </View>
+<HeadingTitle color={Colors.indigo2} title="You have not added any Question"  />
+</View>
     )
     
   }
@@ -81,36 +91,32 @@ const SubCategories = ({ route, navigation }) => {
     
    
     <View style={styles.container}>
-     
       <View>
      {
        data!==undefined && <FlatList 
         
-        data={questions.questions}
+        data={questions}
         renderItem={({item,index})=>(
-          <QuestionCard id={item._id} isShown={item.isShown}  i={index}   question={item.question} options={item.options} answer= {item.answer} />
+          <QuestionCard profile  id={item._id} isShown={item.isShown}  i={index}   question={item.question} options={item.options} answer= {item.answer} />
         )}
        />
      }
     </View>
     { 
-    questions.count>1 &&  <View 
+    count>1 &&  <View 
     style={styles.pagination}
    >
     {
-       isFetching?  <ActivityIndicator size="large" color={Colors.indigo2} />:   <StyledButton
-       bg={page===1?Colors.lightGray:Colors.indigo2}
-       color={page===1?"lightgray":"white"}
-       mt={0} w={120} h={38}  onClick={previousPage} disabled={page===1}  title="Previous"  />
+       isFetching?  <ActivityIndicator color={Colors.indigo2} />: <Button onPress={previousPage}  disabled={page===1} color={Colors.indigo2} title="Previous"/>
     }
   
     <View style={styles.pageBox}>
-      <Text style={{fontSize:16,fontWeight:"500",color:Colors.textColor2}}  >{page}</Text>
+      <Text>{page}</Text>
     </View>
     {
-      isFetching?    <ActivityIndicator size="large"  color={Colors.indigo2} />:
+      isFetching?    <ActivityIndicator color={Colors.indigo2} />:
     
-      <StyledButton color={page===questions.count?"lightgray":"white"} mt={0} w={120} h={38}  onClick={NextPage} disabled={page===questions.count} bg={page===questions.count?Colors.lightGray:Colors.indigo2} title="Next"  />
+      <Button  onPress={NextPage} disabled={page===count} color={Colors.indigo2} title="Next"  />
     }
   </View>
       
@@ -121,7 +127,7 @@ const SubCategories = ({ route, navigation }) => {
   );
 };
 
-export default SubCategories;
+export default Profile;
 
 const styles = StyleSheet.create({
   loadingContainer:{
@@ -136,7 +142,7 @@ const styles = StyleSheet.create({
   
   container: {
     backgroundColor:"white",
-    paddingTop:20,
+    paddingTop:10,
     paddingBottom:40,
 
     flex: 1,
@@ -159,26 +165,23 @@ const styles = StyleSheet.create({
 
   },
   pagination:{
-    paddingVertical:2,
+    paddingVertical:5,
     paddingHorizontal:25,
     justifyContent:"space-between",
-    alignItems:"center",
     flexDirection:"row",
     backgroundColor:"white",
     position:"absolute",
-    bottom:1,
+    bottom:0,
     right:0,
     left:0,
     
   },
   pageBox:{
-     
-    width:50,
-    height:36,
+    width:100,
     justifyContent:"center",
     alignItems:"center",
     borderColor:Colors.lightGray,
-    borderWidth:2,
+    borderWidth:1,
     borderRadius:10,
 
   }
