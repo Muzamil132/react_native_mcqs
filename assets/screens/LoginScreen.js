@@ -11,6 +11,8 @@ import ErrorMessage from "../components/ErrorMessage"
 import HeadingTitle from "../components/HeadingTiltle"
 import { useLoginMutation } from '../services/api';
 import { getData, saveUser } from '../utils/saveUser';
+import { addUser } from '../reducers/userReducer';
+import { useDispatch } from 'react-redux';
 export default function LoginScreen({navigation}) {
 
   const schema = yup.object().shape({
@@ -19,7 +21,7 @@ export default function LoginScreen({navigation}) {
     email:yup.string().email().required()
   });
   const [login,{data,isSuccess,isLoading,isError,error}]= useLoginMutation()
- 
+  const dispatch = useDispatch()
   console.log(data,"from login Screen")
   console.log(error,"from Error Screen")
   const { register, setValue, handleSubmit, control, reset, formState: { errors } } = useForm({
@@ -61,7 +63,8 @@ export default function LoginScreen({navigation}) {
   useEffect(()=>{
     if(isSuccess){
       saveUser(data)
-      getData().then((data)=>console.log(data,"ookkk"))
+      getData().then((data1)=>
+    dispatch(addUser({ user: data1 })))
       navigation.navigate("Home")
     }
     if(isError){

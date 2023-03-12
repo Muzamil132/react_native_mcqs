@@ -4,47 +4,45 @@ import {
   View,
   Text,
   SafeAreaView,
-  DrawerLayoutAndroid,
+ 
   StyleSheet,
   Button,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import DrawerLayout from 'react-native-gesture-handler/DrawerLayout';
 import { addUser, logUserOut } from "../reducers/userReducer";
 import { getData } from "../utils/saveUser";
 import { Colors } from "../utils/Colors";
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+
 import CateGoryCard from "../components/CategoryCard";
-import { sideItemList } from "../utils/data";
+
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { SideDrawer } from "../components/SideDrawer";
+
+import Icon2 from "react-native-vector-icons/FontAwesome5";
 import StyledButton from "../components/StyledButton";
 import { useGetCategoryQuery } from "../services/api";
+import { addRandomColor } from "../utils/RandomColor";
 
 const Home = ({ navigation }) => {
   const {data,isLoading,isError,isSuccess,error} =useGetCategoryQuery()
-  const myIcon = <Icon name="add" size={30} color="white" />;
+ 
   const myIcon1 = <Icon name="sort" size={30} color="black" />;
 
-  const add = <Icon name="add" size={30} color={Colors.textColor2} />;
-  const fav = <Icon name="favorite" size={30} color={Colors.textColor2} />;
-  const  home = <Icon name="home" size={30} color={Colors.textColor2} />;
+
+
 
   const drawerItems=[
+   
     {
-      icon:add,
-      title:"Add Question",
-      to:"addQuestion"
-    },
-    {
-      icon:fav,
+      icon:"heart",
       title:"Saved",
       to:"Saved"
     },
     {
-      icon:home,
+      icon:"file-contract",
       title:"Your contributions",
       to:"Profile"
     },
@@ -53,20 +51,20 @@ const Home = ({ navigation }) => {
 
   const adminItem=[
     {
-      icon:home,
+      icon:"plus-circle",
       title:"Create Category",
       to:"Create Category"
     },
    
     {
-      icon:home,
+      icon:"th-list",
       title:"CategoryList",
       to:"CategoryList"
     }
 
   ]
 
-  const [open,setOpen]=useState(false)
+
  
   const dispatch = useDispatch();
   const retriveData = async () => {
@@ -77,7 +75,8 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     
     retriveData();
-  }, [])
+
+  }, [dispatch])
 
   const {user} = useSelector((state) => state.userReducer);
    
@@ -131,29 +130,32 @@ function NavigateToparticularScreen(name){
 
          >
 
-          <SafeAreaView style={{flex:1,paddingVertical:20,paddingHorizontal:20}} >
+          <SafeAreaView style={{flex:1,paddingVertical:5,paddingHorizontal:20}} >
             <StatusBar color="white" />
 
             <View  style={{paddingBottom:10,borderBottomWidth:1,borderColor:"lightgray"}}>
-          <Text style={{fontSize:21,color:Colors.green,marginBottom:5}} >Examica</Text>
-          <StyledButton title="Close drawer"  bg="black" color="white" w={130}  />
+         
+          <StyledButton  title="Examica"  bg="black" color="white" />
            
             {
-              user?  <View style={{flexDirection:"row",alignItems:"center"}}> 
+              user?  <View style={{flexDirection:"row",alignItems:"center",marginTop:10}}> 
                
                        <View  
-                       style={{width:40,height:40,borderRadius:20,backgroundColor:Colors.purple,justifyContent:"center",alignItems:"center"}}
+                       style={{width:40,height:40,borderRadius:20,backgroundColor:addRandomColor(user?.name),justifyContent:"center",alignItems:"center"}}
 
                        >
                         <Text style={{fontSize:22,fontWeight:"600",color:"white"}}>{"M"}</Text>
                       </View>
 
 
-                 <Text style={{fontSize:16,color:Colors.textColor2,marginLeft:20,fontWeight:"500"}} >{user?.name}</Text>
+                 <Text style={{fontSize:16,color:Colors.textColor2,marginLeft:20,fontWeight:"700",fontFamily:"Roboto"}} >{user?.name.toUpperCase()}</Text>
                 
                      </View>
               :
-              <StyledButton  color={Colors.green} onClick={()=>navigation.navigate("SignIn")} bg={Colors.green50} title="Sign in"/>
+              <StyledButton  color={Colors.green} onClick={()=> {  
+                navigation.navigate("SignIn")
+                drawer.current.closeDrawer()
+              }} bg={Colors.green50} title="Sign in"/>
             }
            
            </View>
@@ -161,14 +163,14 @@ function NavigateToparticularScreen(name){
             {
               user &&
             
-           <StyledButton onClick={()=>dispatch(logUserOut())} bg={Colors.indigo2} title="Logout" />
+           <StyledButton onClick={()=>dispatch(logUserOut())} bg={addRandomColor(user?.name)} title="Logout" />
             }
             <FlatList 
               data={drawerItems}
               renderItem={({item})=>(
-                <TouchableOpacity onPress={()=>NavigateToparticularScreen(item.to)} style={{flexDirection:"row",alignItems:"center",marginTop:10}} >
-                <Text>{item.icon}</Text>
-                <Text style={{color:Colors.text,fontWeight:"500",marginLeft:20,fontSize:16,fontFamily:"Roboto"}} >{item.title}</Text>
+                <TouchableOpacity onPress={()=>NavigateToparticularScreen(item.to)} style={{flexDirection:"row",alignItems:"center",marginTop:15}} >
+                <Text><Icon2 name={item.icon} size={22}  /></Text>
+                <Text style={{color:"black",fontWeight:"500",marginLeft:20,fontSize:16,fontFamily:"Roboto"}} >{item.title}</Text>
               </TouchableOpacity>
 
               )}
@@ -180,9 +182,9 @@ function NavigateToparticularScreen(name){
              <FlatList 
               data={adminItem}
               renderItem={({item})=>(
-                <TouchableOpacity onPress={()=>NavigateToparticularScreen(item.to)} style={{flexDirection:"row",alignItems:"center",marginTop:10}} >
-                <Text>{item.icon}</Text>
-                <Text style={{color:Colors.text,fontWeight:"500",marginLeft:20,fontSize:16,fontFamily:"Roboto"}} >{item.title}</Text>
+                <TouchableOpacity onPress={()=>NavigateToparticularScreen(item.to)} style={{flexDirection:"row",alignItems:"center",marginTop:15}} >
+                <Text><Icon2 name={item.icon} size={22}  /></Text>
+                <Text style={{fontWeight:"500",marginLeft:20,fontSize:17,fontFamily:"Roboto"}} >{item.title}</Text>
               </TouchableOpacity>
 
               )}
@@ -215,12 +217,21 @@ function NavigateToparticularScreen(name){
  
   if(isLoading){
     return(
-      <View>
-        <Text>....Loading</Text>
-      </View>
+    <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+     <ActivityIndicator size="large" color={Colors.purple} />
+
+    </View>
     )
   }
 
+  if(isError){
+    return(
+    <View style={{flex:1,justifyContent:"center",padding:20}}>
+    <Text style={{fontFamily:"Roboto",fontSize:18}} >Some Error has occured!</Text>
+    <Text style={{fontFamily:"Roboto",fontSize:18}} >Please check Your Internet Connection</Text>
+   </View>
+    )
+  }
 
 
 
@@ -229,7 +240,7 @@ function NavigateToparticularScreen(name){
     <View style={styles.container}>
     
     <DrawerLayout 
-    
+      useNativeAnimations={false}
       ref={drawer}
       drawerWidth={300}
       renderNavigationView={Nav}
@@ -261,12 +272,12 @@ function NavigateToparticularScreen(name){
           )}
         />
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={addQuestionhandler}
         style={styles.float}
       >
         <Text>{myIcon}</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     
    </DrawerLayout>
   </View>

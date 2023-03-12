@@ -106,18 +106,22 @@ const Profile = ({ route, navigation }) => {
     count>1 &&  <View 
     style={styles.pagination}
    >
-    {
-       isFetching?  <ActivityIndicator color={Colors.indigo2} />: <Button onPress={previousPage}  disabled={page===1} color={Colors.indigo2} title="Previous"/>
+      {
+       isFetching?  <ActivityIndicator size="large" color={Colors.indigo2} />:   <StyledButton
+       bg={page===1?Colors.lightGray:Colors.indigo2}
+       color={page===1?"lightgray":"white"}
+       mt={0} w={120} h={38}  onClick={previousPage} disabled={page===1}  title="Previous"  />
     }
   
     <View style={styles.pageBox}>
-      <Text>{page}</Text>
+      <Text style={{fontSize:16,fontWeight:"500",color:Colors.textColor2}}  >{page}</Text>
     </View>
     {
-      isFetching?    <ActivityIndicator color={Colors.indigo2} />:
+      isFetching?    <ActivityIndicator size="large"  color={Colors.indigo2} />:
     
-      <Button  onPress={NextPage} disabled={page===count} color={Colors.indigo2} title="Next"  />
+      <StyledButton color={page===count?"lightgray":"white"} mt={0} w={120} h={38}  onClick={NextPage} disabled={page===questions.count} bg={page===count?Colors.lightGray:Colors.indigo2} title="Next"  />
     }
+   
   </View>
       
     }

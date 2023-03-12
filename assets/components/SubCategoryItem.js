@@ -11,7 +11,7 @@ import  { addRandomColor, RandomColors } from "../utils/RandomColor";
 const SubCategoryItem=({title,id,category})=>{
   const [deleteSubCategory,{data,isSuccess,isError,error,isLoading}]= useDeleteSubCategoryMutation()
   const navigation = useNavigation()
-  const myIcon = <Icon1 name="plus" size={20}  color={Colors.purple2} />;
+  const myIcon = <Icon1 name="plus" size={20}  color={addRandomColor(title)} />;
 
     return(
         <TouchableOpacity onPress={()=>navigation.navigate("subCategory",{id,title})} style={styles.card}>
@@ -35,7 +35,7 @@ const SubCategoryItem=({title,id,category})=>{
                </Text>
               </TouchableOpacity> */}
           </View>
-          <TouchableOpacity  style={styles.float}>
+          <TouchableOpacity  onPress={()=>navigation.navigate("addQuestion",{title,id,category})} style={styles.float}>
             <Text>{myIcon}</Text>
 
           </TouchableOpacity>

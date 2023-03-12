@@ -15,10 +15,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRegisterMutation } from '../services/api';
 
 import { saveUser,getData } from '../utils/saveUser';
+import { addUser } from '../reducers/userReducer';
 
 export default function RegisterScreen({navigation}) {
   const [register,{data,isLoading,isSuccess,isError,error}] = useRegisterMutation()
-   console.log(data,"data from here")
+  const dispatch =  useDispatch()
   const schema = yup.object().shape({
     name: yup.string().min(8).required(),
     password: yup.string().min(8).max(32).required(),
@@ -43,7 +44,7 @@ export default function RegisterScreen({navigation}) {
   useEffect(()=>{
     if(isSuccess){
       saveUser(data)
-      getData().then((data)=>console.log(data,"ookkk"))
+      getData().then((data1)=>dispatch(addUser({user:data1})))
       navigation.navigate("Home")
 
     }

@@ -3,6 +3,7 @@ import { Colors } from "../utils/Colors";
 import { useNavigation } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { addRandomColor } from "../utils/RandomColor";
+import { getIcon } from "../utils/data";
 const CateGoryCard =({title,id})=>{
     console.log(title,id)
     const myIcon = <Icon name="atom" size={30}  color={Colors.indigo2} />;
@@ -27,7 +28,7 @@ const CateGoryCard =({title,id})=>{
         style={[styles.card,{borderLeftColor:addRandomColor(title)}]} 
          onPress={()=>navigation.navigate("SubCategoryListing",{id,title})}
         >
-            <Text>{myIcon}</Text>
+            <Text><Icon name={getIcon(title)} size={30}  color={addRandomColor(title)} /></Text>
         <View>
             
          <Text style={styles.text} >
@@ -40,7 +41,7 @@ const CateGoryCard =({title,id})=>{
 
 const styles = StyleSheet.create({
     card:{
-        borderLeftWidth:4,
+        borderLeftWidth:2,
         
         backgroundColor:"white",
         borderRadius:20,
@@ -59,7 +60,8 @@ const styles = StyleSheet.create({
        
     }
     ,text:{
-        fontSize:16,
+        marginTop:10,
+        fontSize:17,
         fontFamily:"Roboto",
         color:"black",
         fontWeight:"600"

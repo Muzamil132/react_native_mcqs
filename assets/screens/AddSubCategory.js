@@ -10,6 +10,7 @@ import { useForm,Controller } from "react-hook-form";
 import ErrorMessage from "../components/ErrorMessage"
 import HeadingTitle from "../components/HeadingTiltle"
 import { useAddCategoryMutation, useAddSubCategoryMutation, useLoginMutation } from '../services/api';
+import { addRandomColor } from '../utils/RandomColor';
 // import { getData, saveUser } from '../utils/saveUser';
 export default function CreateSubCategory({route,navigation}) {
   
@@ -109,7 +110,7 @@ export default function CreateSubCategory({route,navigation}) {
          </View>:
        
     
-       <StyledButton h={56} onClick={handleSubmit((data1)=>add(data1))} bg={Colors.purple1} 
+       <StyledButton h={56} onClick={handleSubmit((data1)=>add(data1))} bg={addRandomColor(topic)} 
         title="Add subcategory" />
        }
 

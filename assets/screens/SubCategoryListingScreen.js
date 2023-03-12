@@ -10,12 +10,12 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import AdminCategoryComponent from "../components/AdminCategoryComponent";
-import SubCategoryItem from "../components/SubCategoryItem";
-import { useGetCategoryQuery, useGetSubCategoryQuery } from "../services/api";
 
-import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
-import LinearGradient from 'expo-linear-gradient';
+import SubCategoryItem from "../components/SubCategoryItem";
+import {  useGetSubCategoryQuery } from "../services/api";
+
+
+
 
 import { Colors } from "../utils/Colors";
 
@@ -24,7 +24,7 @@ const SubCategoryListing = ({ route, navigation }) => {
  const {data,isError,isLoading,isSuccess,error} =useGetSubCategoryQuery(id)
   console.log(data,"from categoryList")
  
-const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
+
   if(isLoading){
     return(
     <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
@@ -59,6 +59,7 @@ const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
         data!==undefined &&
       
       <FlatList 
+      showsVerticalScrollIndicator={false}
        data={data.Subcategories}
        renderItem={({item})=>(
         <SubCategoryItem category={item.Category} title={item.title} id={item._id} />

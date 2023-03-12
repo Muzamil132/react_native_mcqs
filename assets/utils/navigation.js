@@ -18,6 +18,7 @@ import CategoryList from '../screens/Categories';
 import CreateSubCategory from '../screens/AddSubCategory';
 import NestedCategories from '../screens/NestedCategoryList';
 import SubCategoryListing from '../screens/SubCategoryListingScreen';
+import { addRandomColor, RandomAppBarColors, randomRange } from './RandomColor';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,7 +53,7 @@ const NavtionContainer=()=>{
         <Stack.Screen options={{title:"",headerShadowVisible:false}} name="Create Category" component={CreateCategory} />
         <Stack.Screen options={{title:"",headerShadowVisible:false}} name="Create subcategory" component={CreateSubCategory} />
         <Stack.Screen options={({route})=> ({title:route.params.title,headerShadowVisible:false,fontFamily:"Roboto",fontWeight:"600"})} name="NestedCategory" component={NestedCategories} />
-        <Stack.Screen options={({route})=> ({title:route.params.title,headerShadowVisible:false,fontFamily:"Roboto",headerStyle:{backgroundColor:Colors.purple},headerTintColor:"white"})} name="SubCategoryListing" component={SubCategoryListing} />
+        <Stack.Screen options={({route})=> ({title:route.params.title,headerShadowVisible:false,fontFamily:"Roboto",headerStyle:{backgroundColor:addRandomColor(route.params.title)},headerTintColor:"white"})} name="SubCategoryListing" component={SubCategoryListing} />
         <Stack.Screen options={
           {
            headerShadowVisible:false,
@@ -74,7 +75,7 @@ const NavtionContainer=()=>{
           }
         }  name="Edit" component={EditScreen} />
         <Stack.Screen options={({ route }) => ({ title: route.name.toUpperCase(),headerShadowVisible:false,
-    headerTintColor:Colors.green } )}  name="Profile" component={Profile} />
+    headerTintColor:"black" } )}  name="Profile" component={Profile} />
         <Stack.Screen  options={({ route }) => ({ title: route.name.toUpperCase(),headerShadowVisible:false,
     headerTintColor:Colors.green } )}  name="Saved" component={SavedScreen} />
        
@@ -82,7 +83,7 @@ const NavtionContainer=()=>{
        
          
         <Stack.Screen   options={({ route }) => ({ title: route.params.title.toUpperCase(),headerShadowVisible:false,
-    headerTintColor:"white",fontFamily:"Roboto",fontSize:14,headerStyle:{backgroundColor:Colors.purple} } )}   name="subCategory" component={SubCategories} />
+    headerTintColor:"white",fontFamily:"Roboto",fontSize:14,headerStyle:{backgroundColor:addRandomColor(route.params.title)} } )}   name="subCategory" component={SubCategories} />
       
       <Stack.Screen     name="CategoryList" component={CategoryList} />
        

@@ -1,5 +1,8 @@
 import {Colors} from "./Colors"
 
+
+
+
 export const RandomColors=[
     "FAFAFA",
     "#ff1744",
@@ -56,7 +59,7 @@ export function addRandomColor(title){
     if(title[0].toUpperCase()==="J"){
         return RandomColors[11]
     }
-    if(title[0].toUpperCase()==="L"){
+    if(title[0].toUpperCase()==="C"){
         return RandomColors[12]
     }
     if(title[0].toUpperCase()==="M"){
@@ -72,7 +75,7 @@ export function addRandomColor(title){
         return RandomColors[16]
     }
     if(title[0].toUpperCase()==="S"){
-        return RandomColors[17]
+        return RandomColors[4]
     }
     if(title[0].toUpperCase()==="U"){
         return RandomColors[18]
@@ -83,8 +86,23 @@ export function addRandomColor(title){
     if(title[0].toUpperCase()==="T"){
         return RandomColors[19]
     }
+    return RandomColors[10]
    
    
 
 
 }
+
+export const RandomAppBarColors =[
+    Colors.orange,
+    Colors.red,
+    Colors.purple,
+    Colors.green,
+    RandomColors[13],
+    RandomColors[4]
+
+]
+
+export function randomRange(myMin, myMax) {
+    return Math.floor(Math.random() * (myMax - myMin + 1) + myMin);
+  }

@@ -85,7 +85,7 @@ const SubCategories = ({ route, navigation }) => {
       <View>
      {
        data!==undefined && <FlatList 
-        
+       showsVerticalScrollIndicator={false}
         data={questions.questions}
         renderItem={({item,index})=>(
           <QuestionCard id={item._id} isShown={item.isShown}  i={index}   question={item.question} options={item.options} answer= {item.answer} />

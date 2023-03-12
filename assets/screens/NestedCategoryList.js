@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Button,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import AdminCategoryComponent from "../components/AdminCategoryComponent";
 import AdminSubCategory from "../components/AdminSubCategory";
@@ -22,7 +23,19 @@ const NestedCategories = ({ route, navigation }) => {
   
   if(isLoading){
     return(
-      <View><Text>Loading...</Text></View>
+    <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+     <ActivityIndicator size="large" color={Colors.purple} />
+
+    </View>
+    )
+  }
+
+  if(isError){
+    return(
+    <View style={{flex:1,justifyContent:"center",padding:20}}>
+    <Text style={{fontFamily:"Roboto",fontSize:18}} >Some Error has occured!</Text>
+    <Text style={{fontFamily:"Roboto",fontSize:18}} >Please check Your Internet Connection</Text>
+   </View>
     )
   }
 
@@ -32,6 +45,7 @@ const NestedCategories = ({ route, navigation }) => {
         data!==undefined &&
       
       <FlatList 
+       showsVerticalScrollIndicator={false}
        data={data.Subcategories}
        renderItem={({item})=>(
         <AdminSubCategory category={item.Category} title={item.title} id={item._id} isNestedList />

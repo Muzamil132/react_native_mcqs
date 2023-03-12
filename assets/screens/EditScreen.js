@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Color from "../utils/Colors";
-import { Picker } from "@react-native-picker/picker";
+
 import { Colors } from "../utils/Colors";
 import HeadingTitle from "../components/HeadingTiltle";
 import { TextInput, TouchableOpacity, Alert } from "react-native";
@@ -34,7 +34,7 @@ const AddQuestionScreen = ({ route, navigation }) => {
   const { user } = useSelector((state) => state.userReducer);
   const {questions} =useSelector((state)=>state.myQuestionReducer)
   const existQuestion = questions.filter((item)=>item._id===route.params.id)[0]
-   console.log(data,"data is great ")
+ 
   const schema = yup.object().shape({
     question: yup.string().min(8).required(),
     option_1: yup.string().required(),
@@ -142,33 +142,10 @@ const AddQuestionScreen = ({ route, navigation }) => {
     
     style={{ flex: 1, backgroundColor: "white" }}>
       <View style={styles.container}>
-        <HeadingTitle
-          title="Select Category"
-          fontSize={15}
-          position="flex-start"
-        />
-        <View
-          style={{
-            borderRadius: 10,
-            borderWidth: 2,
-            borderColor: Colors.textColor1,
-          }}
-        >
-          <Picker
-            placeholder="Select Category"
-            
-            selectedValue={selected}
-            onValueChange={(itemValue, itemIndex) => setSelected(itemValue)}
-          >
-            {sideItemList.map((item, index) => (
-              <Picker.Item key={index} label={item.title} value={item.title} />
-            ))}
-          </Picker>
-        </View>
-
+       
        
         <View style={styles.formBox}>
-          <HeadingTitle title="Add Question" fontSize={15} />
+          <HeadingTitle title="Edit Question" fontSize={15} />
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value, onFocus } }) => (

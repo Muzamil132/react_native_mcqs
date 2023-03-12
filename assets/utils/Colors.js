@@ -1,7 +1,7 @@
 export const Colors={
     bgmain:"#fafafa",
     lightText:"#666",
-    purple:"#7e22ce",
+    purple:"#d500f9",
     bggray:"#f9fafb",
     cyan:"#059669",
     red:"#f43f5e",

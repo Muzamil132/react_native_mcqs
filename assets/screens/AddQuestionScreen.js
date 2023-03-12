@@ -2,17 +2,14 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
   View,
-  Text,
-  StyleSheet,
-  Button,
-  FlatList,
   ScrollView,
-  Pressable,
+  StyleSheet,
+
   ActivityIndicator
 } from "react-native";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Color from "../utils/Colors";
-import { Picker } from "@react-native-picker/picker";
+
 import { Colors } from "../utils/Colors";
 import HeadingTitle from "../components/HeadingTiltle";
 import { TextInput, TouchableOpacity, Alert } from "react-native";
@@ -24,10 +21,14 @@ import ErrorMessage from "../components/ErrorMessage";
 import { useSelector } from "react-redux";
 import { useAddQuestionMutation } from "../services/api";
 import { sideItemList } from "../utils/data";
+import { addRandomColor } from "../utils/RandomColor";
+
+
 
 
 const AddQuestionScreen = ({ route, navigation }) => {
   const {title,id,category}=route.params
+ 
   const [selected, setSelected] = useState(sideItemList[3].title);
   const [addQuestion,{isLoading,isError,isSuccess,data,error}] =useAddQuestionMutation()
   const { user } = useSelector((state) => state.userReducer);
@@ -41,6 +42,7 @@ const AddQuestionScreen = ({ route, navigation }) => {
     answer: yup.string().required(),
   });
   const {
+    
     setValue,
     handleSubmit,
     control,
@@ -133,7 +135,7 @@ const AddQuestionScreen = ({ route, navigation }) => {
   // console.log(route);
   return (
    
-    <KeyboardAwareScrollView
+    <ScrollView
     
     style={{ flex: 1, backgroundColor: "white" }}>
       <View style={styles.container}>
@@ -245,15 +247,15 @@ const AddQuestionScreen = ({ route, navigation }) => {
           )}
           
           { isLoading?  
-          <View  style={styles.horizontal}> 
+          <View  style={[styles.horizontal,{backgroundColor:addRandomColor(title)}]}> 
           <ActivityIndicator size="large" color="white" />
           </View>
           :
-            <StyledButton  onClick={handleSubmit((data)=>addQuestiontoDb(data))} h={56} bg={Colors.indigo2} title="ADD"/>
+            <StyledButton  onClick={handleSubmit((data)=>addQuestiontoDb(data))} h={56} bg={addRandomColor(title)} title="ADD"/>
           }
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </ScrollView>
    
   );
 };
@@ -274,14 +276,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 13,
-    backgroundColor:Colors.indigo2,
+   
     marginTop:10,
     borderRadius:10,
 
   
   },
   focusInput: {
-    borderColor: Colors.indigo2,
+    borderColor:Colors.indigo2,
     width: "100%",
     borderWidth: 2,
     borderRadius: 10,
